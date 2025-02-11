@@ -134,8 +134,8 @@ func main() {
 	c := socket.DefaultServerOptions()
 
 	c.SetCors(&types.Cors{
-		Origin:            allowOrigins,
-		Methods:           []string{"*"},
+		Origin:            "*",
+		Methods:           "*",
 		AllowedHeaders:    []string{},
 		Credentials:       false,
 		PreflightContinue: true,
@@ -220,9 +220,7 @@ func main() {
 			return
 		}
 
-		ctx.JSON(http.StatusOK, gin.H{
-			"jwt": jwtToken,
-		})
+		ctx.String(http.StatusOK, jwtToken)
 	})
 
 	go r.Run(":8080")
