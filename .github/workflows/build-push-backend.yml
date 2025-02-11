@@ -2,9 +2,12 @@ name: Build and Push Docker Image
 
 on:
   push:
-    branches:
-      - master
-  workflow_dispatch:
+    # branches:
+    #   - master
+    tags:
+      - "*"
+    paths:
+      - "backend/**"
 
 jobs:
   build_and_push:
@@ -34,12 +37,13 @@ jobs:
       - name: Build, tag and push image
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: backend
           provenance: false
           push: true
           tags: |
             ghcr.io/${{ secrets.REGISTRY_USERNAME }}/${{ github.event.repository.name }}:latest
             ghcr.io/${{ secrets.REGISTRY_USERNAME }}/${{ github.event.repository.name }}:${{ steps.short-sha.outputs.sha }}
+            ghcr.io/${{ secrets.REGISTRY_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
           platforms: linux/amd64,linux/arm64,linux/arm64/v8
           cache-from: type=gha
           cache-to: type=gha,mode=max
