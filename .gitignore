@@ -1,0 +1,8 @@
+*.env
+*.exe
+*.idea/
+*.log
+*temp/
+*tmp/
+*vendor/
+go.mod.bak
