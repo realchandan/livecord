@@ -1,0 +1,44 @@
+name: Build and Deploy to Builds Branch
+
+on:
+  push:
+    # branches:
+    #   - master
+    tags:
+      - "*"
+    paths:
+      - "widget/**"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set Up Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install Dependencies
+        working-directory: widget
+        run: bun i
+
+      - name: Build Project
+        working-directory: widget
+        run: bun run build
+
+      - name: Checkout Builds Branch
+        run: |
+          git fetch origin builds || git checkout --orphan builds
+          git checkout builds
+
+      - name: Copy, Commit, and Push widget.js
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          mkdir -p "$TAG_NAME"
+          cp -r widget/dist/* "$TAG_NAME/"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$TAG_NAME/widget.js"
+          git commit -m "Add build artifact for tag $TAG_NAME" || echo "No changes to commit"
+          git push origin builds
