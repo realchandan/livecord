@@ -2,7 +2,7 @@
 
 Live chat with website visitors via Discord.
 
-Check this demo: [https://youtu.be/HYlmKSBhAY4](https://youtu.be/HYlmKSBhAY4)
+Check this demo: [https://youtu.be/H6fnrln3b0c](https://youtu.be/H6fnrln3b0c)
 
 ## How to use?
 
