@@ -1,0 +1,21 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "formatter": {
+    "enabled": false
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "a11y": {
+        "useKeyWithClickEvents": "off",
+        "useButtonType": "off",
+        "noSvgWithoutTitle": "off",
+        "useMediaCaption": "off"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "off",
+        "noExplicitAny": "off"
+      }
+    }
+  }
+}

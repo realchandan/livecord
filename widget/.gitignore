@@ -1,0 +1,16 @@
+*.local
+*.log
+*.njsproj
+*.ntvs*
+*.sln
+*.suo
+*.sw?
+*.tsbuildinfo
+.DS_Store
+.idea
+bun.lockb
+dist
+dist-ssr
+logs/
+node_modules/
+package-lock.json
