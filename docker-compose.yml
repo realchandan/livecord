@@ -1,0 +1,47 @@
+services:
+  livecord:
+    container_name: livecord
+    env_file: ./backend/.env
+    image: ghcr.io/realchandan/livecord:0.0.4
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.livecord.entrypoints=websecure
+      - traefik.http.routers.livecord.rule=Host(`$HOST`)
+      - traefik.http.routers.livecord.tls.certresolver=certresolver
+      - traefik.http.routers.livecord.tls=true
+      - traefik.http.services.livecord.loadbalancer.server.port=8080
+    restart: always
+  traefik:
+    command:
+      - "--certificatesresolvers.certresolver.acme.email=$ACME_EMAIL"
+      - "--certificatesresolvers.certresolver.acme.storage=/certs/acme.json"
+      - "--certificatesresolvers.certresolver.acme.tlschallenge=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.http3=true"
+      - "--log.level=INFO"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+    container_name: traefik
+    image: traefik:v3.3.2
+    ports:
+      - mode: host
+        published: 80
+        target: 80
+      - mode: host
+        protocol: tcp
+        published: 443
+        target: 443
+      - mode: host
+        protocol: udp
+        published: 443
+        target: 443
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - certs_data:/certs:rw
+volumes:
+  certs_data: null
