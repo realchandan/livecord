@@ -69,7 +69,7 @@ export const ChatBot = ({ server_url, turnstile_site_key }: AppProps) => {
 
   const handleNewMessage = (t: any) =>
     messageSchema
-      .parseAsync(t)
+      .parseAsync(JSON.parse(new TextDecoder().decode(t)))
       .then((message) => {
         if (soundActive) {
           if (audioRef.current) {
